@@ -1,0 +1,52 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: kafka-archiver
+  namespace: default
+spec:
+  replicas: 1
+  revisionHistoryLimit: 0
+  template:
+    metadata:
+      labels:
+        app: kafka-archiver
+    spec:
+      containers:
+        - name: kafka-archiver
+          image: quay.io/unity3d/kafka-archiver:v0.5.0
+          imagePullPolicy: Always
+          command:
+            - bash
+            - -c
+            - >
+              app
+              -logtostderr
+              -v 4
+              -brokers kafka1:9092,kafka2:9092
+              -topic-whitelist ".*"
+              -consumer-group kafka-archiver-demo
+              -partitioner IsoDateFieldPartitioner
+              -partitioner-key ts
+              -buffer-interval 15m
+              -buffer-size 100MiB
+              -s3
+              -s3-bucket s3-kafka-archiver-demo
+              -s3-region us-east-1
+          env:
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: kafka-archiver
+                  key: AWS_ACCESS_KEY_ID
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: kafka-archiver
+                  key: AWS_SECRET_ACCESS_KEY
+          resources:
+            requests:
+              memory: 1Gi
+              cpu: 1
+            limits:
+              memory: 1Gi
