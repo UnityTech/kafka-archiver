@@ -1,6 +1,6 @@
 # Kafka Archiver
 
-![](https://github.com/ashleymcnamara/gophers/blob/master/MovingGopher.png)
+<img src="https://github.com/ashleymcnamara/gophers/blob/master/MovingGopher.png" width="128">
 
 ## Features
 - Uses Kafka Client Sarama with Cluster extension
