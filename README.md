@@ -1,5 +1,7 @@
 # Kafka Archiver
 
+![](https://github.com/ashleymcnamara/gophers/blob/master/MovingGopher.png)
+
 ## Features
 - Uses Kafka Client Sarama with Cluster extension
 - Stores offsets in Kafka consumer groups (0.9+)
