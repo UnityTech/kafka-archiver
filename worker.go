@@ -89,20 +89,24 @@ func (w *Worker) Init() {
 	flag.Var(&w.topics, "topics", "Kafka topics to subscribe to.")
 	flag.StringVar(&w.topicWhitelist, "topic-whitelist", "", "An additional whitelist of topics to subscribe to.")
 	flag.StringVar(&w.topicBlacklist, "topic-blacklist", "", "An additional blacklist of topics, precedes the whitelist.")
+	flag.StringVar(&w.consumerGroup, "consumer-group", "", "Name of your kafka consumer group. (required)")
+	flag.StringVar(&w.consumerAutoOffsetReset, "consumer-auto-offset-reset", "oldest", "Kafka consumer group topic default offset.")
+	flag.Var(&w.consumerDelayStart, "consumer-delay-start", "Number of seconds to wait before starting consuming. (default \"0s\")")
+
+	// Define Buffer flags.
 	flag.Var(&w.bufferFlushInterval, "buffer-interval", "The duration when the buffer should close the file. (default \"15m\")")
 	flag.StringVar(&w.bufferFlushSize, "buffer-size", "100MiB", "The size in bytes when the buffer should close the file.")
 	flag.IntVar(&w.bufferQueueLength, "buffer-queue-length", 32, "The size of the queue to hold the files to be uploaded.")
 	flag.StringVar(&w.bufferLocation, "buffer-location", os.TempDir(), "The base folder where to store temporary files.")
 	flag.StringVar(&w.bufferMem, "buffer-mem", "8KB", "Amount of memory a buffer can use.")
-	flag.StringVar(&w.datadogHost, "datadog-host", flagutil.EnvOrDefault("DATADOG_HOST", "localhost:2585"), "The host where the datadog agents listens to.")
-	flag.StringVar(&w.statsdPrefix, "statsd-prefix", "kafka-archiver", "The name prefix for statsd metrics.")
-	flag.StringVar(&w.consumerGroup, "consumer-group", "", "Name of your kafka consumer group. (required)")
-	flag.StringVar(&w.consumerAutoOffsetReset, "consumer-auto-offset-reset", "oldest", "Kafka consumer group topic default offset.")
-	flag.Var(&w.consumerDelayStart, "consumer-delay-start", "Number of seconds to wait before starting consuming. (default \"0s\")")
+
+	// Define Partitioner flags.
 	flag.StringVar(&w.partitionerClass, "partitioner", "DefaultPartitioner", "The name of the partitioner to use.")
 	flag.StringVar(&w.partitionerFieldName, "partitioner-key", "", "Name of the JSON field to parse.")
 	flag.StringVar(&w.partitionerPathBaseFolder, "partitioner-path-folder", "backup", "The top level folder to prepend to the path used when partitioning files.")
 	flag.StringVar(&w.partitionerPathTopicNamePrefix, "partitioner-path-topic-prefix", "topic=", "A prefix to prepend to the path used when partitioning files.")
+
+	// Define S3 flags.
 	flag.BoolVar(&w.s3enabled, "s3", false, "Enable S3 uploader.")
 	flag.StringVar(&w.s3region, "s3-region", "", "S3 Bucket Region.")
 	flag.StringVar(&w.s3bucket, "s3-bucket", "", "S3 Bucket where to upload files.")
@@ -112,6 +116,10 @@ func (w *Worker) Init() {
 	flag.BoolVar(&w.s3ForcePathStyle, "s3-force-path-style", false, "Enable to force the request to use path-style addressing on S3.")
 	flag.BoolVar(&w.s3ClientDebug, "s3-client-debug", false, "Enable to enable debug logging on S3 client.")
 	flag.StringVar(&w.s3NotificationTopic, "s3-notification-topic", "", "Kafka topic used to store uploaded S3 files.")
+
+	// Define other flags.
+	flag.StringVar(&w.datadogHost, "datadog-host", flagutil.EnvOrDefault("DATADOG_HOST", "localhost:2585"), "The host where the datadog agents listens to.")
+	flag.StringVar(&w.statsdPrefix, "statsd-prefix", "kafka-archiver", "The name prefix for statsd metrics.")
 
 	// Parse the flags.
 	flag.Parse()
