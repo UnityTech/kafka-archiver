@@ -1,6 +1,9 @@
 # Kafka Archiver
-
-<img src="https://github.com/ashleymcnamara/gophers/blob/master/MovingGopher.png" width="128">
+<p align="center"><img src="https://github.com/ashleymcnamara/gophers/blob/master/MovingGopher.png" width="360"></p>
+<p align="center"><b>Store and archive Kafka logs.</b></p>
+<p align="center">
+  <a href="https://goreportcard.com/report/github.com/UnityTech/kafka-archiver"><img src="https://goreportcard.com/badge/github.com/UnityTech/kafka-archiver" alt="Go Report Card"></img></a>
+</p>
 
 ## Features
 - Uses Kafka Client Sarama with Cluster extension
