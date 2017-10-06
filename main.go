@@ -11,7 +11,7 @@ import (
 
 var (
 	// Version indicates the current version of the Kafka Achiever.
-	Version = "0.100"
+	Version = "0.101"
 )
 
 func init() {

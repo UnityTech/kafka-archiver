@@ -93,7 +93,7 @@ func (w *Worker) upload(f *buffer.Flush) error {
 	// Create a new exponential backoff provider.
 	b := backoff.NewExponentialBackOff()
 	b.MaxElapsedTime = 5 * time.Minute
-	b.InitialInterval = 2 * time.Second
+	b.InitialInterval = 5 * time.Second
 
 	// S3 Uploader is wrapped in a backoff function with an exponential provider.
 	var s3Response *s3manager.UploadOutput
