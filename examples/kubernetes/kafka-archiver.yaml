@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: kafka-archiver
-          image: quay.io/unity3d/kafka-archiver:v0.100
+          image: quay.io/unity3d/kafka-archiver:0.100
           imagePullPolicy: Always
           command:
             - bash
