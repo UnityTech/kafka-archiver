@@ -20,7 +20,7 @@ spec:
             - bash
             - -c
             - >
-              app
+              kafka-archiver
               -logtostderr
               -v 4
               -brokers kafka1:9092,kafka2:9092
