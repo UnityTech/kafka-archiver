@@ -76,8 +76,9 @@ type Worker struct {
 	s3Concurrency       int
 
 	// Other Flags.
-	datadogHost  string
-	statsdPrefix string
+	datadogEnabled bool
+	datadogHost    string
+	statsdPrefix   string
 }
 
 // Init is designed to be called only once. This function initialized the context of the application,
@@ -143,6 +144,7 @@ func (w *Worker) Init() {
 		"Kafka topic used to store uploaded S3 files.")
 
 	// Define other flags.
+	flag.BoolVar(&w.datadogEnabled, "datadog", true, "Enable sending metrics to Statsd/Datadog")
 	flag.StringVar(&w.datadogHost, "datadog-host",
 		flagutil.EnvOrDefault("DATADOG_HOST", "localhost:2585"),
 		"The host where the datadog agents listens to.")
@@ -243,13 +245,15 @@ func (w *Worker) Init() {
 		DefaultBufferConfig: bufferConfig,
 	})
 
-	// Setup datadog metrics client.
-	metrics, err = statsd.New(w.datadogHost)
-	if err != nil {
-		glog.Fatal(err)
+	if w.datadogEnabled {
+		// Setup datadog metrics client.
+		metrics, err = statsd.New(w.datadogHost)
+		if err != nil {
+			glog.Fatal(err)
+		}
+		metrics.Namespace = fmt.Sprintf("%s.", w.statsdPrefix)
+		glog.Infof("created datadog client host=%s", w.datadogHost)
 	}
-	metrics.Namespace = fmt.Sprintf("%s.", w.statsdPrefix)
-	glog.Infof("created datadog client host=%s", w.datadogHost)
 
 	// Setup Cloud Providers.
 	if w.s3enabled {
